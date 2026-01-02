@@ -1,11 +1,9 @@
-name: Build Mod
+name: Build 1.20.1
 
 on:
   push:
     branches:
-      - main
-      - "1.20.1"
-  pull_request:
+      - 1.20.1
   workflow_dispatch:
 
 jobs:
@@ -13,23 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 🔴 关键改动：使用 Java 21（解决 fabric-loom 报错）
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 17
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: Build
         run: ./gradlew build --no-daemon
 
-      - name: Upload build artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
